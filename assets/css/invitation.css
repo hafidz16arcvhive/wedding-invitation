@@ -1,0 +1,709 @@
+/* ============================================================
+   FILE: assets/css/invitation.css
+   Gaya: Modern Minimalist — hitam, putih, abu tipis
+   Font: Playfair Display (display) + DM Sans (body)
+   ============================================================ */
+
+/* ── CSS Variables (ubah di sini untuk ganti tema) ── */
+:root {
+  --black:      #0A0A0A;
+  --white:      #FFFFFF;
+  --gray-50:    #FAFAFA;
+  --gray-100:   #F5F5F5;
+  --gray-200:   #E5E5E5;
+  --gray-400:   #A3A3A3;
+  --gray-600:   #525252;
+  --gray-800:   #262626;
+  --accent:     #0A0A0A;   /* warna aksen utama */
+  --line:       #E5E5E5;   /* warna garis pembatas */
+
+  --font-display: 'Playfair Display', serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg:  0 16px 48px rgba(0,0,0,0.12);
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+a   { text-decoration: none; color: inherit; }
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: var(--white); }
+::-webkit-scrollbar-thumb { background: var(--black); }
+
+/* ============================================================
+   COVER SCREEN — layar penutup sebelum undangan dibuka
+   ============================================================ */
+#cover-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#cover-screen.closing {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* Bingkai dekoratif di cover */
+.cover-frame {
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+  position: relative;
+}
+/* Sudut bingkai */
+.cover-frame::before,
+.cover-frame::after,
+.cover-frame .corner-br,
+.cover-frame .corner-tl {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: rgba(255,255,255,0.5);
+  border-style: solid;
+}
+.cover-frame::before  { top: -1px;    left: -1px;   border-width: 2px 0 0 2px; }
+.cover-frame::after   { top: -1px;    right: -1px;  border-width: 2px 2px 0 0; }
+.cover-frame .corner-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.cover-frame .corner-tl { bottom: -1px; left: -1px;  border-width: 0 0 2px 2px; }
+
+/* ============================================================
+   SECTION BASE
+   ============================================================ */
+.section {
+  padding: 96px 24px;
+}
+.section--dark {
+  background: var(--black);
+  color: var(--white);
+}
+.section--gray {
+  background: var(--gray-50);
+}
+.section--white {
+  background: var(--white);
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.container--wide {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── Section Header ── */
+.section-tag {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  display: block;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.section-title em {
+  font-style: italic;
+  font-weight: 300;
+}
+.section-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--black);
+  margin: 20px 0;
+}
+.section--dark .section-divider  { background: rgba(255,255,255,0.3); }
+.section--dark .section-tag      { color: rgba(255,255,255,0.4); }
+
+/* ============================================================
+   NAMA PASANGAN — Typography utama
+   ============================================================ */
+.couple-names {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 10vw, 88px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.couple-names .ampersand {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gray-400);
+  display: block;
+  font-size: 0.6em;
+  margin: 4px 0;
+}
+.couple-names--white { color: var(--white); }
+
+/* ============================================================
+   COUNTDOWN TIMER
+   ============================================================ */
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--gray-200);
+  border: 1px solid var(--gray-200);
+  margin-top: 40px;
+}
+.countdown-item {
+  background: var(--white);
+  padding: 28px 16px;
+  text-align: center;
+}
+.section--dark .countdown-grid  { background: rgba(255,255,255,0.1); border-color: transparent; }
+.section--dark .countdown-item  { background: rgba(255,255,255,0.05); }
+.countdown-number {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  display: block;
+}
+.countdown-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-top: 8px;
+  display: block;
+}
+
+/* ============================================================
+   MEMPELAI CARD
+   ============================================================ */
+.couple-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-top: 48px;
+}
+.person-card { text-align: center; }
+.person-photo {
+  width: 140px;
+  height: 180px;
+  object-fit: cover;
+  margin: 0 auto 20px;
+  filter: grayscale(20%);
+  transition: var(--transition);
+}
+.person-photo:hover    { filter: grayscale(0%); transform: scale(1.02); }
+.person-photo--empty   {
+  width: 140px;
+  height: 180px;
+  background: var(--gray-100);
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  font-size: 48px;
+}
+.person-role {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+.person-name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.person-fullname {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--gray-600);
+  margin-top: 4px;
+}
+.person-parents {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-top: 12px;
+  line-height: 1.8;
+}
+.couple-separator {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--gray-200);
+  text-align: center;
+}
+
+/* ============================================================
+   DETAIL ACARA
+   ============================================================ */
+.event-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--gray-200);
+  border: 1px solid var(--gray-200);
+  margin-top: 48px;
+}
+.event-card {
+  background: var(--white);
+  padding: 36px 32px;
+}
+.event-type {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 16px;
+}
+.event-name {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+.event-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--gray-600);
+}
+.event-detail i {
+  color: var(--black);
+  font-size: 14px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+.event-maps-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 1px solid var(--black);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+.event-maps-btn:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* ============================================================
+   GALERI FOTO
+   ============================================================ */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 48px;
+}
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  background: var(--gray-100);
+  cursor: pointer;
+}
+.gallery-item::after {
+  content: '';
+  display: block;
+  padding-bottom: 100%; /* Rasio 1:1 */
+}
+.gallery-item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+  filter: grayscale(30%);
+}
+.gallery-item:hover img {
+  transform: scale(1.06);
+  filter: grayscale(0%);
+}
+/* Item pertama lebih besar */
+.gallery-item:first-child {
+  grid-column: span 2;
+}
+.gallery-item:first-child::after {
+  padding-bottom: 50%;
+}
+
+/* ============================================================
+   LOVE STORY
+   ============================================================ */
+.love-story-text {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--gray-600);
+  border-left: 2px solid var(--black);
+  padding-left: 24px;
+  margin-top: 32px;
+}
+
+/* ============================================================
+   RSVP FORM
+   ============================================================ */
+.rsvp-form {
+  margin-top: 40px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  margin-bottom: 8px;
+}
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--black);
+  transition: border-color 0.2s ease;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.form-input:focus { border-color: var(--black); }
+.form-input::placeholder { color: var(--gray-400); }
+
+textarea.form-input { resize: vertical; min-height: 96px; }
+
+/* Radio attendance */
+.attendance-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.attendance-option input { display: none; }
+.attendance-label {
+  display: block;
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.attendance-option input:checked + .attendance-label {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+.attendance-label:hover { border-color: var(--black); }
+
+/* ============================================================
+   UCAPAN / MESSAGES
+   ============================================================ */
+.messages-list {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--gray-200);
+  border: 1px solid var(--gray-200);
+}
+.message-item {
+  background: var(--white);
+  padding: 20px 24px;
+}
+.message-name {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+.message-time {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+.message-text {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   WEDDING GIFT
+   ============================================================ */
+.gift-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-top: 40px;
+}
+.gift-card {
+  background: rgba(255,255,255,0.04);
+  padding: 32px;
+  text-align: center;
+}
+.gift-card-title {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 16px;
+}
+.gift-bank-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.gift-account-number {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.gift-account-name {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 16px;
+}
+.qris-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 0 auto 16px;
+  background: white;
+  padding: 8px;
+}
+
+/* ============================================================
+   TOMBOL
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  width: 100%;
+}
+.btn-dark {
+  background: var(--black);
+  color: var(--white);
+}
+.btn-dark:hover { background: var(--gray-800); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.6);
+}
+
+.btn-copy {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px 16px;
+  font-size: 11px;
+  width: auto;
+}
+.btn-copy:hover { border-color: rgba(255,255,255,0.5); color: white; }
+
+/* ============================================================
+   MUSIK PLAYER BUTTON
+   ============================================================ */
+#music-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+  width: 44px;
+  height: 44px;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+#music-btn:hover { background: var(--gray-800); transform: scale(1.05); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.music-spinning { animation: spin 4s linear infinite; }
+
+/* ============================================================
+   ALERT / NOTIFIKASI
+   ============================================================ */
+.alert {
+  padding: 14px 18px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alert-success { background: #f0fdf4; color: #166534; border-left: 3px solid #16a34a; }
+.alert-error   { background: #fef2f2; color: #991b1b; border-left: 3px solid #dc2626; }
+
+/* ============================================================
+   LIGHTBOX GALERI
+   ============================================================ */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#lightbox.active { display: flex; }
+#lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+#lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+}
+#lightbox-close:hover { opacity: 1; }
+
+/* ============================================================
+   SCROLL REVEAL ANIMATION
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   RESPONSIVE — Mobile
+   ============================================================ */
+@media (max-width: 640px) {
+  .section { padding: 64px 20px; }
+
+  .couple-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .couple-separator { font-size: 32px; }
+
+  .event-grid   { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-item:first-child { grid-column: span 2; }
+
+  .gift-grid    { grid-template-columns: 1fr; }
+  .attendance-options { grid-template-columns: 1fr; }
+
+  .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .cover-frame { padding: 36px 24px; }
+}

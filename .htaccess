@@ -1,0 +1,11 @@
+# ============================================================
+# FILE: .htaccess (root project)
+# ============================================================
+Options -Indexes
+RewriteEngine On
+
+# Keamanan: blokir akses langsung ke folder config
+RewriteRule ^config/ - [F,L]
+
+# Keamanan: blokir akses ke file .sql
+RewriteRule \.sql$ - [F,L]
